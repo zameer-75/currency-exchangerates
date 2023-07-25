@@ -37,9 +37,11 @@ Create DynamoDB Table (currency-exchange-rates) and set currency as a partition 
 1. Create an S3 bucket (currency-exchangerate-bucket) and upload the required packages to the S3 bucket and grant it to the public access so that it can be easily accessible.
 2.  S3 Object URL: https://currency-exchangerate-bucket.s3.amazonaws.com/requiredpython-packages.zip 
 
+### Create IAM Role that the Lambda function can use to communicate with DynamoDB and Cloudwatch
+
 ### AWS Lambda Function
 
-1. Create a new Lambda function on the AWS console using CloudFormation.
+1. Create a new Lambda function and *attached the IAM role (currency-exchange-role)*
 2. Add a new layer to the Lambda function and upload the required packages zip file to the layer from S3 endpoint https://currency-exchangerate-bucket.s3.amazonaws.com/requiredpython-packages.zip. 
 ![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/0bdd5f7c-f727-467b-846d-7cc1766a7681)
 
@@ -50,6 +52,13 @@ Create DynamoDB Table (currency-exchange-rates) and set currency as a partition 
 ![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/074400fa-be9f-4bed-93f8-b6d987c67c81)
 
 5. Now Deploy and test the Lambda function it will return a JSON response
+
+### Cloudwatch Trigger to execute Lambda function every day  
+1. Create EventBridge Schedule to trigger the lambda function every day using a cron job
+![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/2c167995-bc15-4c11-80d6-d48aba3901a7)
+
+2. Added target to the Lambda Function
+![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/b1844456-976b-4d5c-b413-c3133b733e30)
 
 ### AWS API Gateway 
 
