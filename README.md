@@ -63,7 +63,7 @@ _rm -rf *dist-info_ After running this command, we should be left with only the 
 Set up AWS CloudWatch to monitor the Lambda functions and API Gateway for errors and performance metrics.
 
 ## How to Deploy this application using IaC Framework (Terraform)
-1. Clone the Repo
+1. Clone the Repo https://github.com/zameer-75/currency-exchangerates.git
 2. Make sure you have the following setups
    + The ***Terraform CLI (1.2.0+)*** installed.
    + The ***AWS CLI*** installed.
