@@ -1,7 +1,7 @@
 # Currency exchange rates
 This API fetches everyday exchange rates and is stored in a dynamo DB.
 
-# Lambda function 
+# Lambda function (ExchangeRatesLambdaFunction)
 The lambda function fetched everyday exchange rates and stored them in a database, and also exposes a public REST API endpoint that provides current exchange rate information for all tracked currencies and their change compared to the previous day for all the tracked currencies.
 
 ## Dependencies or required Packages 
@@ -17,58 +17,72 @@ In the code, BeautifulSoup is used to scrape data from a website containing exch
 
 ## How to install the above packages
 
-*To install the packages mentioned in the code, you can use the Python package manager pip. First, create a folder/directory (require-packages) open a terminal or command prompt, and execute the following commands in the directory:*
+*To install the packages mentioned in the code, you can use the Python package manager pip. First, create a folder/directory (exchange-rates-lambda) open a terminal or command prompt, and execute the following commands in the directory:*
 
 + BeautifulSoup: 
     ***pip install bs4 -t .***
 + Requests: ***pip install requests -t .***
 + Boto3: ***pip install boto3 -t .***
 + JSON: Python's JSON module comes built-in with Python, so you don't need to install it separately.
-Above commands will install all the dependencies required to run the Lambda function into the folder/directory (require-packages). Run the command
-_rm -rf *dist-info_ After running this command, we should be left with only the relevant packages needed. Now zip this folder (require-packages) and upload and add it to the Lambda function layer.
-
-## AWS Services 
-
-###  DynamoDB Table (currency-exchange-rates)
-Create DynamoDB Table (currency-exchange-rates) and set currency as a partition Key.
-
-### Create S3 bucket 
-
-1. Create an S3 bucket (currency-exchangerate-bucket) and upload the required packages to the S3 bucket and grant it to the public access so that it can be easily accessible.
-2.  S3 Object URL: https://currency-exchangerate-bucket.s3.amazonaws.com/requiredpython-packages.zip 
-
-### Create IAM Role that the Lambda function can use to communicate with DynamoDB and Cloudwatch
-
-### AWS Lambda Function
-
-1. Create a new Lambda function and *attached the IAM role (currency-exchange-role)*
-2. Add a new layer to the Lambda function and upload the required packages zip file to the layer from S3 endpoint https://currency-exchangerate-bucket.s3.amazonaws.com/requiredpython-packages.zip. 
-![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/0bdd5f7c-f727-467b-846d-7cc1766a7681)
-
-3. Add this Layer to the Lambda function
-![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/72d5fb46-283a-4006-96b6-9bc9f94b00b6)
-
-4. Configure the Test Event for the Lambda function
-![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/074400fa-be9f-4bed-93f8-b6d987c67c81)
-
-5. Now Deploy and test the Lambda function it will return a JSON response
-
-### Cloudwatch Trigger to execute Lambda function every day  
-1. Create EventBridge Schedule to trigger the lambda function every day using a cron job
-![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/2c167995-bc15-4c11-80d6-d48aba3901a7)
-
-2. Added target to the Lambda Function
-![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/b1844456-976b-4d5c-b413-c3133b733e30)
-
-### AWS API Gateway 
-
-1. Create API Gateway and select REST API
-2. Create Resources (getexchangerates) and Methods (Get) for API Gateway
-![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/d96e5764-99fd-4482-b9b4-a03dd511fced)
-
-3. Create and Deploy it to the stage (prod).
-4. It will create an Invoke URL: https://q9d3bfnz80.execute-api.us-east-1.amazonaws.com/prod/getexchangerates
-
-### AWS CloudWatch:
-Set up AWS CloudWatch to monitor the Lambda functions and API Gateway for errors and performance metrics.
   
+Above commands will install all the dependencies required to run the Lambda function into the folder/directory (exchange-rates-lambda). Run the command
+_rm -rf *dist-info_ After running this command, we should be left with only the relevant packages needed. Now zip this folder (exchange-rates-lambda) and upload it to the Lambda function console. ***Make sure the lambda_function.py file is presented in the same directory***
+
+**To Trigger Lambda Function Manually from the console make sure you have set the following Event Json**
+![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/e63caf6a-c1e6-45ca-9148-7bdea2c442e5)
+
+**On Successful function run you will see the following output**
+![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/758f72d9-faaa-4bd4-8870-621df8202485)
+
+***Please note that we are seeing null values for yesterday's data and change rate because these value has not yet been added to dynamoDB table***
+
+## Following AWS Services have been used to accomplish this task.
+
++ #### DynamoDB Table Create DynamoDB Table (currencyexchange-rates) and set the date as a partition Key.
+![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/55aaec32-c59e-4175-b07c-5e0543529cdc)
+
++ #### Create IAM Roles that the Lambda function can use to communicate with DynamoDB, API Gateway, and Cloudwatch
+![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/7ddecf07-3047-417b-b7be-9bd29bbb4025)
+
+![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/25f0457c-7fe2-4852-b732-29d3c830bcbc)
+
+![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/a234c642-dc9f-4776-9329-ed1387c324fd)
+
++ #### AWS Lambda Function (ExchangeRatesLambdaFunction)
+![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/1ed7cac9-311f-47fa-8f17-381f96dad2d4)
+
++ #### Cloudwatch Trigger to execute Lambda function every day  
+![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/127428c8-339d-4c76-960a-7afef70260c4)
+
++ #### AWS API Gateway (ExchangeRatesAPI)
+![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/33d6410e-6bf7-4c27-890e-f38be8e7778e)
+
+![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/eaf114d3-f0f0-4302-bd83-95cb1b33b8fe)
+
++ #### AWS CloudWatch:
+Set up AWS CloudWatch to monitor the Lambda functions and API Gateway for errors and performance metrics.
+
+## How to Deploy this application using IaC Framework (Terraform)
+1. Clone the Repo
+2. Make sure you have the following setups
+   + The ***Terraform CLI (1.2.0+)*** installed.
+   + The ***AWS CLI*** installed.
+   + ***AWS account and associated credentials*** that allows you to create resources.    
+3. Open the terminal and move into the repo OR open the Repo in VS code
+4. Run the following commands
+   + terraform init
+   + terraform validate
+   + terraform plan
+   + terraform apply
+5. It will automatically deploy the application to AWS and will show the API Gateway URL:
+    https://03gtp1pls6.execute-api.us-east-1.amazonaws.com/prod/getexchangerates
+7.  Final output will be as follow
+      ![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/1b2e11b6-f5a7-485c-ad43-502edfb9f65f)
+
+8.  When we access the API Gateway URL using Postman we got the following results (***if we have two days of data stored in DynamoDB***)
+![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/73004f45-1bb8-47ed-b353-2cf54da80c8c)
+
+9.  ***Please note that after fresh installation you will see null values for ***yesterday's and change rate*** because these values have not yet been added to the DynamoDB table, they will be added when the Lambda function will trigger next day as per the following assignment note***
+![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/c5bf64ca-b0c6-43bb-a1f5-25b9ebb7d79d)
+
+10.  To destroy this application, run the command ***terraform destroy***
