@@ -1,6 +1,6 @@
 # Currency exchange rates
 This API fetches everyday exchange rates and is stored in a dynamo DB.
-
+Here's my running API URL: ***https://lwrva1i4m6.execute-api.us-east-1.amazonaws.com/prod/getexchangerates*** 
 # Lambda function (ExchangeRatesLambdaFunction)
 The lambda function fetched everyday exchange rates and stored them in a database, and also exposes a public REST API endpoint that provides current exchange rate information for all tracked currencies and their change compared to the previous day for all the tracked currencies.
 
@@ -34,7 +34,7 @@ _rm -rf *dist-info_ After running this command, we should be left with only the 
 **On Successful function run you will see the following output**
 ![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/758f72d9-faaa-4bd4-8870-621df8202485)
 
-***Please note that we are seeing null values for yesterday's data and change rate because these value has not yet been added to dynamoDB table***
+***Please note that we are seeing null values for yesterday's data and change rate because these value has not yet been added to DynamoDB table***
 
 ## Following AWS Services have been used to accomplish this task.
 
@@ -64,10 +64,10 @@ Set up AWS CloudWatch to monitor the Lambda functions and API Gateway for errors
 
 ## How to Deploy this application using IaC Framework (Terraform)
 1. Clone the Repo https://github.com/zameer-75/currency-exchangerates.git
-2. Make sure you have the following setups
+2. **Make sure you have the following Prerequisite setups**
    + The ***Terraform CLI (1.2.0+)*** installed.
    + The ***AWS CLI*** installed.
-   + ***AWS account and associated credentials*** that allows you to create resources.    
+   + ***AWS account and associated credentials*** that allow you to create resources.    
 3. Open the terminal and move into the repo OR open the Repo in VS code
 4. Run the following commands
    + terraform init
@@ -75,7 +75,7 @@ Set up AWS CloudWatch to monitor the Lambda functions and API Gateway for errors
    + terraform plan
    + terraform apply
 5. It will automatically deploy the application to AWS and will show the API Gateway URL:
-    https://03gtp1pls6.execute-api.us-east-1.amazonaws.com/prod/getexchangerates
+    ***https://lwrva1i4m6.execute-api.us-east-1.amazonaws.com/prod/getexchangerates*** 
 7.  Final output will be as follow
       ![image](https://github.com/zameer-75/currency-exchangerates/assets/139122254/1b2e11b6-f5a7-485c-ad43-502edfb9f65f)
 
